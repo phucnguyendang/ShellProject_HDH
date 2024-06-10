@@ -38,6 +38,9 @@ void _exit() {
     cout << color[0];
     cout << "*** Exit tinyShell ***" << "\n";
     cout << defaultCor;
+    //Doi 3s de nguoi dung doc duoc *** Exit tinyShell ***
+    Sleep(3000);
+    
     shellStatus = false;
     // Dong tat ca cac process/thread dang thuc hien
     for (int i = (int) listProcess.size() - 1; i >= 0; -- i) {
@@ -48,16 +51,45 @@ void _exit() {
 }
 
 /*
-    Ham tra lai thoi gian hien tai
+    Ham tra lai va thay doi thoi gian hien tai
 */
 void _time() {
-    time_t tt;
-    struct tm* ti;
-    time(&tt);
-    ti = localtime(&tt);
-    cout << color[2];
-    cout << "Current date-time: " << asctime(ti);
-    cout << defaultCor;
+    SYSTEMTIME st;
+    GetLocalTime(&st);
+    printf("Current time: %02d:%02d:%02d\n", st.wHour, st.wMinute, st.wSecond);
+    printf("Current date: %02d/%02d/%04d\n", st.wDay, st.wMonth, st.wYear);
+
+int hour, minute, second;
+    printf("Enter new time: ");
+    if(scanf("%d:%d:%d", &hour,&minute,&second)==3){
+        st.wHour = hour;
+        st.wMinute = minute;
+        st.wSecond = second;
+
+        if(SetLocalTime(&st)){
+            printf("Time successfully updated.\n");
+        }
+        else{
+            printf("Failed to updated time. Error code: %d\n", GetLastError());
+        }
+    }
+
+    int day,month,year;
+    printf("Enter new date (dd/mm/yyyy): ");
+    if (scanf("%d/%d/%d", &day, &month, &year) == 3) {
+        st.wDay = day;
+        st.wMonth = month;
+        st.wYear = year;
+
+        if (SetLocalTime(&st)) {
+            printf("Date successfully updated.\n");
+        } else {
+            printf("Failed to update date. Error code: %d\n", GetLastError());
+        }
+    } else {
+        printf("Invalid date format. Please use dd/mm/yyyy.\n");
+    }
+
 }
 
 
